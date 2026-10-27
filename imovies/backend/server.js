@@ -90,7 +90,7 @@ mongoose.connect(MONGO_URI)
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/bookings', bookingRoutes);
+app.use('/api/booking', bookingRoutes);
 
 // Get all movies
 app.get('/api/movies', async (req, res) => {
