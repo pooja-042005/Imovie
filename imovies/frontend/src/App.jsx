@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+axios.defaults.baseURL = API_URL;
 
 // --- HOME PAGE COMPONENT ---
 function Home() {
@@ -23,7 +25,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/movies')
+    axios.get('/api/movies')
       .then(res => setMovies(res.data))
       .catch(err => console.log(err));
   }, []);
@@ -194,7 +196,7 @@ function AdminDashboard() {
   }, [user, navigate]);
 
   const fetchMovies = () => {
-    axios.get('http://localhost:5000/api/movies')
+    axios.get('/api/movies')
       .then(res => setMovies(res.data))
       .catch(err => console.log(err));
   };
@@ -202,7 +204,7 @@ function AdminDashboard() {
   const handleAddMovie = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/movies', form);
+      await axios.post('/api/movies', form);
       alert("Movie added successfully! 🎬");
       setForm({ title: '', genre: '', rating: '', poster: '', description: '' });
       fetchMovies();
@@ -214,7 +216,7 @@ function AdminDashboard() {
   const handleDeleteMovie = async (id) => {
     if (window.confirm("Are you sure you want to delete this movie?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/movies/${id}`);
+        await axios.delete(`/api/movies/${id}`);
         alert("Movie deleted successfully! 🗑️");
         fetchMovies();
       } catch (err) {
@@ -277,7 +279,7 @@ function MovieBooking() {
   const allSeats = ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "C1", "C2", "C3", "C4"];
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/movies')
+    axios.get('/api/movies')
       .then(res => {
         const found = res.data.find(m => m._id === id);
         setMovie(found);
@@ -315,7 +317,7 @@ function MovieBooking() {
         totalAmount: selectedSeats.length * 250
       };
 
-      await axios.post('http://localhost:5000/api/bookings/book', bookingData);
+      await axios.post('/api/bookings/book', bookingData);
       alert("Ticket booked successfully! 🎉");
       navigate('/my-bookings');
     } catch (err) {
@@ -408,7 +410,7 @@ function MyBookings() {
 
   useEffect(() => {
     if (user && user.email) {
-      axios.get(`http://localhost:5000/api/bookings/user/${user.email}`)
+      axios.get(`/api/bookings/user/${user.email}`)
         .then(res => setBookings(res.data))
         .catch(err => console.log(err));
     }
@@ -445,7 +447,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post('/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       alert("Login successful! 🎉");
@@ -527,7 +529,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { name, email, password, role });
+      await axios.post('/api/auth/register', { name, email, password, role });
       alert("Registration successful! Please login. 🎉");
       navigate('/login');
     } catch (err) {
