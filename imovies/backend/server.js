@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const Movie = require('./models/Movie');
 const authRoutes = require('./routes/auth');
-const bookingRoutes = require('./routes/bookings');
+const bookingRoutes = require('./routes/booking'); // Fixed bookings -> booking
 
 const app = express();
 app.use(express.json());
@@ -90,7 +90,7 @@ mongoose.connect(MONGO_URI)
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/booking', bookingRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Get all movies
 app.get('/api/movies', async (req, res) => {
